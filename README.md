@@ -20,7 +20,7 @@ Avant d'exécuter cette application, assurez-vous d'avoir installé les élémen
 
 1. Clonez ce référentiel sur votre machine locale :
 
-`git clone https://github.com/VOTRE_UTILISATEUR/edi-dnt.git`
+`git clone https://github.com/Eli0uce/edi-dnt.git`
 
 
 2. Configurez votre serveur web pour qu'il pointe vers le répertoire racine de l'application.
@@ -44,7 +44,7 @@ Avant d'exécuter cette application, assurez-vous d'avoir installé les élémen
 
 ## Auteur
 
-[Your Name](https://github.com/VOTRE_UTILISATEUR)
+[Eli0uce](https://github.com/Eli0uce)
 
 N'hésitez pas à me contacter si vous avez des questions ou des commentaires.
 
