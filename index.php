@@ -167,11 +167,12 @@
                 periodeNumber = "01";
             }
 
-            var accountNumber = "1234567/890";
-            var uniqueNumber = "001";
+            var compteEmployeur = "1234567";
+            var suffixeCompteEmployeur = "890";
+            var numeroUnique = "001";
             var extension = ".xml";
 
-            var fileName = prefix + year + periodeType + periodeNumber + "-" + accountNumber + "-" + uniqueNumber + extension;
+            var fileName = prefix + year + periodeType + periodeNumber + "-" + compteEmployeur + suffixeCompteEmployeur + "-" + numeroUnique + extension;
             return fileName;
         }
     </script>
