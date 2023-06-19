@@ -30,7 +30,7 @@
                         </select>
                     </div>
                     <div id="dateFields" style="display: none;">
-                        <!-- Les champs de date seront ajoutés ici dynamiquement -->
+                        <!-- The date fields will be dynamically added here -->
                     </div>
                     <button type="submit" class="btn btn-primary">Générer</button>
                 </form>
@@ -43,11 +43,11 @@
             var periode = document.getElementById("periode").value;
             var dateFields = document.getElementById("dateFields");
 
-            // Réinitialiser les champs de date à chaque changement de période
+            // Reset the date fields with each period change
             dateFields.innerHTML = "";
 
             if (periode === "mois") {
-                // Créer le formulaire de date mensuel (mois et année)
+                // Create the monthly date form (month and year)
                 var monthInput = document.createElement("input");
                 monthInput.setAttribute("type", "number");
                 monthInput.setAttribute("class", "form-control mb-3");
@@ -69,7 +69,7 @@
                 dateFields.appendChild(monthInput);
                 dateFields.appendChild(yearInput);
             } else if (periode === "trimestre") {
-                // Créer le formulaire de sélection du trimestre
+                // Create the quarterly selection form
                 var trimestreSelect = document.createElement("select");
                 trimestreSelect.setAttribute("class", "form-control mb-3");
                 trimestreSelect.setAttribute("name", "trimestre");
@@ -97,7 +97,7 @@
                 dateFields.appendChild(trimestreSelect);
                 dateFields.appendChild(yearInput);
             } else if (periode === "annee") {
-                // Créer le sélecteur de date pour une année
+                // Create the date picker for a year
                 var yearInput = document.createElement("input");
                 yearInput.setAttribute("type", "number");
                 yearInput.setAttribute("class", "form-control mb-3");
@@ -108,11 +108,9 @@
                 yearInput.setAttribute("max", "2100");
 
                 dateFields.appendChild(yearInput);
-
-                // Ajoutez ici votre code pour initialiser le sélecteur de date spécifique à l'année si nécessaire
             }
 
-            // Afficher les champs de date
+            // Display the date fields
             dateFields.style.display = "block";
         }
 
@@ -123,7 +121,7 @@
                 var month = document.getElementsByName("mois")[0].value;
                 var year = document.getElementsByName("annee")[0].value;
 
-                // Valider les valeurs du mois et de l'année (ajoutez des conditions supplémentaires si nécessaire)
+                // Validate the month and year values (add additional conditions if necessary)
                 if (month < 1 || month > 12) {
                     alert("Mois invalide");
                     return false;
@@ -136,18 +134,18 @@
                 var trimestre = document.getElementsByName("trimestre")[0].value;
                 var year = document.getElementsByName("annee")[0].value;
 
-                // Valider les valeurs du trimestre et de l'année (ajoutez des conditions supplémentaires si nécessaire)
-                // Ici, nous ne validons que si l'année est un nombre à 4 chiffres
+                // Validate the values of the quarter and the year (add additional conditions if necessary)
+                // Here, we validate only if the year is a 4-digit number
                 if (!year.match(/^\d{4}$/)) {
                     alert("Année invalide");
                     return false;
                 }
             }
 
-            // Générer le nom de fichier XML
+            // Generate the XML file name
             var fileName = generateFileName(periode, year, month, trimestre);
 
-            // Soumettre le formulaire avec le nom du fichier XML
+            // Submit the form with the XML file name
             document.getElementById("xmlFileName").value = fileName;
 
             return true;
