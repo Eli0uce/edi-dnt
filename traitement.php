@@ -1,4 +1,6 @@
 <?php
+require "config.php";
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $periode = $_POST["periode"];
     $year = $_POST["annee"];
@@ -8,9 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $type = "";
     $numero = "";
     $separator = "-";
-    $compteEmployeur = ""; // Replace with the actual value
-    $suffixeCompteEmployeur = ""; // Replace with the actual value
-    $numeroUnique = ""; // Replace with the actual value
+    $compteEmployeur = "";
+    $suffixeCompteEmployeur = "";
+    $numeroUnique = str_pad(mt_rand(1, 999), 3, "0", STR_PAD_LEFT);
     $extension = ".xml";
 
     // Determine the values based on the selected period
@@ -26,21 +28,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $numero = "01";
     }
 
-    // Generate the XML file name
-    $fileName = $prefix . $year . $type . $numero . $separator . $compteEmployeur . $suffixeCompteEmployeur . $separator . $numeroUnique . $extension;
+    $querySociete = "SELECT 
+        SUBSTRING(numerocafat, 1, 6) AS numeroCafat,
+        SUBSTRING(numerocafat, 8, 10) AS suffixeCafat
+        FROM societe";
+    $resultSociete = $conn->query($querySociete);
+    $rowSociete = $resultSociete->fetch(PDO::FETCH_ASSOC);
+    $numeroCafat = $rowSociete['numeroCafat'];
+    $suffixeCafat = $rowSociete['suffixeCafat'];
 
-    // Generate the XML content
-    $xmlContent = "<root>
-        <prefix>$prefix</prefix>
-        <annee>$year</annee>
-        <type>$type</type>
-        <numero>$numero</numero>
-        <separator>$separator</separator>
-        <compteEmployeur>$compteEmployeur</compteEmployeur>
-        <suffixeCompteEmployeur>$suffixeCompteEmployeur</suffixeCompteEmployeur>
-        <numeroUnique>$numeroUnique</numeroUnique>
-        <extension>$extension</extension>
-    </root>";
+    // Generate the XML file name
+    $fileName = $prefix . $year . $type . $numero . $separator . "0" . $numeroCafat . $suffixeCafat . $separator . $numeroUnique . $extension;
+
+    // Construire et exécuter la requête SQL pour récupérer les données
+    $query = "SELECT * FROM bulletin";
+    $stmt = $conn->query($query);
+    $bulletinData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    include "xml.php";
 
     // Generate the XML file
     file_put_contents($fileName, $xmlContent);
