@@ -3,7 +3,7 @@
 // Get data from the societe table
 $querySociete = "SELECT 
     SUBSTRING(numerocafat, 1, 6) AS numeroCafat,
-    SUBSTRING(numerocafat, 10) AS suffixeCafat,
+    SUBSTRING(numerocafat, 8, 10) AS suffixeCafat,
     enseigne,
     SUBSTRING(ridet, 1, 7) AS ridet,
     SUBSTRING(ridet, 9, 11) AS RID,
