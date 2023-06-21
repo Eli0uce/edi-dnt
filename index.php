@@ -7,8 +7,14 @@
     <style>
         .card {
             margin: 0 auto;
-            margin-top: 100px;
+            margin-top: 30px;
             max-width: 400px;
+        }
+
+        .centered-image {
+            display: block;
+            margin: 0 auto;
+            text-align: center;
         }
     </style>
 </head>
@@ -16,9 +22,12 @@
 <body>
 
     <div class="container">
+        <div class="centered-image mt-5">
+            <img src="./files/icon-cafat.png" alt="Logo Cafat" width="200px">
+        </div>
         <div class="card">
             <div class="card-body">
-                <h2 class="card-title">Génération du fichier XML</h2>
+                <h2 class="card-title">Génération XML</h2>
                 <form action="traitement.php" method="POST" onsubmit="return generateXML()">
                     <div class="form-group">
                         <label for="periode">Période:</label>

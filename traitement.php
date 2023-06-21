@@ -41,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $fileName = $prefix . $year . $type . $numero . $separator . "0" . $numeroCafat . $suffixeCafat . $separator . $numeroUnique . $extension;
 
     // Construire et exécuter la requête SQL pour récupérer les données
+    $periode = strtoupper($_POST["periode"]);
     $query = "SELECT * FROM bulletin";
     $stmt = $conn->query($query);
     $bulletinData = $stmt->fetchAll(PDO::FETCH_ASSOC);
