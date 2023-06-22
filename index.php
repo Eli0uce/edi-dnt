@@ -33,9 +33,9 @@
                         <label for="periode">Période:</label>
                         <select class="form-control" id="periode" name="periode" onchange="showDateFields()">
                             <option value="">Choisir une période</option>
-                            <option value="mois">Mensuel</option>
-                            <option value="trimestre">Trimestriel</option>
-                            <option value="annee">Annuel</option>
+                            <option value="mensuel">Mensuel</option>
+                            <option value="trimestriel">Trimestriel</option>
+                            <option value="annuel">Annuel</option>
                         </select>
                     </div>
                     <div id="dateFields" style="display: none;">
@@ -55,68 +55,68 @@
             // Reset the date fields with each period change
             dateFields.innerHTML = "";
 
-            if (periode === "mois") {
-                // Create the monthly date form (month and year)
-                var monthInput = document.createElement("input");
-                monthInput.setAttribute("type", "number");
-                monthInput.setAttribute("class", "form-control mb-3");
-                monthInput.setAttribute("placeholder", "Mois");
-                monthInput.setAttribute("name", "mois");
-                monthInput.setAttribute("required", "required");
-                monthInput.setAttribute("min", "1");
-                monthInput.setAttribute("max", "12");
+            if (periode === "mensuel") {
+                // Create the mensuelly date form (mensuel and annuel)
+                var mensuelInput = document.createElement("input");
+                mensuelInput.setAttribute("type", "number");
+                mensuelInput.setAttribute("class", "form-control mb-3");
+                mensuelInput.setAttribute("placeholder", "Mois");
+                mensuelInput.setAttribute("name", "mensuel");
+                mensuelInput.setAttribute("required", "required");
+                mensuelInput.setAttribute("min", "1");
+                mensuelInput.setAttribute("max", "12");
 
-                var yearInput = document.createElement("input");
-                yearInput.setAttribute("type", "number");
-                yearInput.setAttribute("class", "form-control mb-3");
-                yearInput.setAttribute("placeholder", "Année");
-                yearInput.setAttribute("name", "annee");
-                yearInput.setAttribute("required", "required");
-                yearInput.setAttribute("min", "1900");
-                yearInput.setAttribute("max", "2100");
+                var annuelInput = document.createElement("input");
+                annuelInput.setAttribute("type", "number");
+                annuelInput.setAttribute("class", "form-control mb-3");
+                annuelInput.setAttribute("placeholder", "Année");
+                annuelInput.setAttribute("name", "annuel");
+                annuelInput.setAttribute("required", "required");
+                annuelInput.setAttribute("min", "1900");
+                annuelInput.setAttribute("max", "2100");
 
-                dateFields.appendChild(monthInput);
-                dateFields.appendChild(yearInput);
-            } else if (periode === "trimestre") {
+                dateFields.appendChild(mensuelInput);
+                dateFields.appendChild(annuelInput);
+            } else if (periode === "trimestriel") {
                 // Create the quarterly selection form
-                var trimestreSelect = document.createElement("select");
-                trimestreSelect.setAttribute("class", "form-control mb-3");
-                trimestreSelect.setAttribute("name", "trimestre");
-                trimestreSelect.setAttribute("required", "required");
+                var trimestrielSelect = document.createElement("select");
+                trimestrielSelect.setAttribute("class", "form-control mb-3");
+                trimestrielSelect.setAttribute("name", "trimestriel");
+                trimestrielSelect.setAttribute("required", "required");
 
-                var trimestres = ["Trimestre 1", "Trimestre 2", "Trimestre 3", "Trimestre 4"];
-                var trimestreValues = ["01-03", "04-06", "07-09", "10-12"];
+                var trimestriels = ["Trimestre 1", "Trimestre 2", "Trimestre 3", "Trimestre 4"];
+                var trimestrielValues = ["01", "02", "03", "04"];
 
-                for (var i = 0; i < trimestres.length; i++) {
+                for (var i = 0; i < trimestriels.length; i++) {
                     var option = document.createElement("option");
-                    option.value = trimestreValues[i];
-                    option.text = trimestres[i];
-                    trimestreSelect.appendChild(option);
+                    option.value = trimestrielValues[i];
+                    option.text = trimestriels[i];
+                    trimestrielSelect.appendChild(option);
                 }
 
-                var yearInput = document.createElement("input");
-                yearInput.setAttribute("type", "number");
-                yearInput.setAttribute("class", "form-control mb-3");
-                yearInput.setAttribute("placeholder", "Année");
-                yearInput.setAttribute("name", "annee");
-                yearInput.setAttribute("required", "required");
-                yearInput.setAttribute("min", "1900");
-                yearInput.setAttribute("max", "2100");
+                var annuelInput = document.createElement("input");
+                annuelInput.setAttribute("type", "number");
+                annuelInput.setAttribute("class", "form-control mb-3");
+                annuelInput.setAttribute("placeholder", "Année");
+                annuelInput.setAttribute("name", "annuel");
+                annuelInput.setAttribute("required", "required");
+                annuelInput.setAttribute("min", "1900");
+                annuelInput.setAttribute("max", "2100");
 
-                dateFields.appendChild(trimestreSelect);
-                dateFields.appendChild(yearInput);
-            } else if (periode === "annee") {
-                // Create the date picker for a year
-                var yearInput = document.createElement("input");
-                yearInput.setAttribute("type", "number");
-                yearInput.setAttribute("class", "form-control mb-3");
-                yearInput.setAttribute("placeholder", "Année");
-                yearInput.setAttribute("name", "annee");
-                yearInput.setAttribute("required", "required");
-                yearInput.setAttribute("min", "1900");
-                yearInput.setAttribute("max", "2100");
+                dateFields.appendChild(trimestrielSelect);
+                dateFields.appendChild(annuelInput);
+            } else if (periode === "annuel") {
+                // Create the date picker for a annuel
+                var annuelInput = document.createElement("input");
+                annuelInput.setAttribute("type", "number");
+                annuelInput.setAttribute("class", "form-control mb-3");
+                annuelInput.setAttribute("placeholder", "Année");
+                annuelInput.setAttribute("name", "annuel");
+                annuelInput.setAttribute("required", "required");
+                annuelInput.setAttribute("min", "1900");
+                annuelInput.setAttribute("max", "2100");
 
-                dateFields.appendChild(yearInput);
+                dateFields.appendChild(annuelInput);
             }
 
             // Display the date fields
@@ -126,33 +126,33 @@
         function generateXML() {
             var periode = document.getElementById("periode").value;
 
-            if (periode === "mois") {
-                var month = document.getElementsByName("mois")[0].value;
-                var year = document.getElementsByName("annee")[0].value;
+            if (periode === "mensuel") {
+                var mensuel = document.getElementsByName("mensuel")[0].value;
+                var annuel = document.getElementsByName("annuel")[0].value;
 
-                // Validate the month and year values (add additional conditions if necessary)
-                if (month < 1 || month > 12) {
+                // Validate the mensuel and annuel values (add additional conditions if necessary)
+                if (mensuel < 1 || mensuel > 12) {
                     alert("Mois invalide");
                     return false;
                 }
-                if (year < 1900 || year > 2100) {
+                if (annuel < 1900 || annuel > 2100) {
                     alert("Année invalide");
                     return false;
                 }
-            } else if (periode === "trimestre") {
-                var trimestre = document.getElementsByName("trimestre")[0].value;
-                var year = document.getElementsByName("annee")[0].value;
+            } else if (periode === "trimestriel") {
+                var trimestriel = document.getElementsByName("trimestriel")[0].value;
+                var annuel = document.getElementsByName("annuel")[0].value;
 
-                // Validate the values of the quarter and the year (add additional conditions if necessary)
-                // Here, we validate only if the year is a 4-digit number
-                if (!year.match(/^\d{4}$/)) {
+                // Validate the values of the quarter and the annuel (add additional conditions if necessary)
+                // Here, we validate only if the annuel is a 4-digit number
+                if (!annuel.match(/^\d{4}$/)) {
                     alert("Année invalide");
                     return false;
                 }
             }
 
             // Generate the XML file name
-            var fileName = generateFileName(periode, year, month, trimestre);
+            var fileName = generateFileName(periode, annuel, mensuel, trimestriel);
 
             // Submit the form with the XML file name
             document.getElementById("xmlFileName").value = fileName;
@@ -160,18 +160,18 @@
             return true;
         }
 
-        function generateFileName(periode, year, month, trimestre) {
+        function generateFileName(periode, annuel, mensuel, trimestriel) {
             var prefix = "DN-";
             var periodeType = "";
             var periodeNumber = "";
 
-            if (periode === "mois") {
+            if (periode === "mensuel") {
                 periodeType = "M";
-                periodeNumber = ("0" + month).slice(-2);
-            } else if (periode === "trimestre") {
+                periodeNumber = ("0" + mensuel).slice(-2);
+            } else if (periode === "trimestriel") {
                 periodeType = "T";
-                periodeNumber = trimestre.split("-")[0];
-            } else if (periode === "annee") {
+                periodeNumber = trimestriel.split("-")[0];
+            } else if (periode === "annuel") {
                 periodeType = "A";
                 periodeNumber = "01";
             }
@@ -181,7 +181,7 @@
             var numeroUnique = "001";
             var extension = ".xml";
 
-            var fileName = prefix + year + periodeType + periodeNumber + "-" + compteEmployeur + suffixeCompteEmployeur + "-" + numeroUnique + extension;
+            var fileName = prefix + annuel + periodeType + periodeNumber + "-" + compteEmployeur + suffixeCompteEmployeur + "-" + numeroUnique + extension;
             return fileName;
         }
     </script>

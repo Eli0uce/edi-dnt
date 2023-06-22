@@ -22,7 +22,7 @@ $tauxat = $rowSociete['tauxat'];
 // Get data from the salaries table
 $querySalaries = "SELECT s.*, b.*, lb.rubrique_id FROM salaries s
                   INNER JOIN bulletin b ON s.id = b.salarie_id
-                  INNER JOIN ligne_bulletin lb ON b.id = lb.bulletin_id LIMIT 1";
+                  INNER JOIN ligne_bulletin lb ON b.id = lb.bulletin_id";
 $resultSalaries = $conn->query($querySalaries);
 
 // Generate the XML content
@@ -42,7 +42,7 @@ $xmlContent .= "    </entete>\n";
 $xmlContent .= "    <corps>\n";
 $xmlContent .= "        <periode>\n";
 $xmlContent .= "            <type>$periode</type>\n";
-$xmlContent .= "            <annee>$year</annee>\n";
+$xmlContent .= "            <annee>$annuel</annee>\n";
 $xmlContent .= "            <numero>$numero</numero>\n";
 $xmlContent .= "        </periode>\n";
 $xmlContent .= "        <attributs>\n";
@@ -65,7 +65,7 @@ while ($rowSalaries = $resultSalaries->fetch(PDO::FETCH_ASSOC)) {
     $salarieId = $rowSalaries['id'];
 
     // Query to retrieve the bulletin data using the salarie_id
-    $queryBulletin = "SELECT * FROM ligne_bulletin WHERE bulletin_id = $salarieId AND rubrique_id IN (57, 58, 67, 50, 56, 59, 62, 68, 64, 65, 66)";
+    $queryBulletin = "SELECT * FROM ligne_bulletin WHERE bulletin_id = $salarieId AND rubrique_id IN (57, 58, 67, 56, 59, 62, 68, 64, 65, 66)";
     $resultBulletin = $conn->query($queryBulletin);
 
     // Check for errors during the query execution
@@ -82,6 +82,12 @@ while ($rowSalaries = $resultSalaries->fetch(PDO::FETCH_ASSOC)) {
     $drupture = $rowSalaries['drupture'];
     $bperiod = $rowSalaries['periode'];
 
+    // Vérifier si la valeur de $nombreHeures correspond déjà au format "x.xx"
+    if (!preg_match("/\d+\.\d{2}/", $nombreHeures)) {
+        // Formater la valeur avec 2 décimales
+        $nombreHeures = number_format($nombreHeures, 2, '.', '');
+    }
+
     $xmlContent .= "            <assure>\n";
     $xmlContent .= "                <numero>$numcafat</numero>\n";
     $xmlContent .= "                <nom>$nom</nom>\n";
@@ -94,14 +100,44 @@ while ($rowSalaries = $resultSalaries->fetch(PDO::FETCH_ASSOC)) {
     $xmlContent .= "                <assiettes>\n";
 
     while ($rowLigneBulletin = $resultBulletin->fetch(PDO::FETCH_ASSOC)) {
-        $libelle = $rowLigneBulletin['libelle'];
         $base = $rowLigneBulletin['base'];
         $rubriqueId = $rowLigneBulletin['rubrique_id'];
 
-        $xmlContent .= "                    <assiette>\n";
-        $xmlContent .= "                        <type>$libelle</type>\n";
-        $xmlContent .= "                        <valeur>$base</valeur>\n";
-        $xmlContent .= "                    </assiette>\n";
+        // Définir le libellé en fonction de la valeur de $rubriqueId
+        if ($rubriqueId == 57 || $rubriqueId == 58) {
+            $libelle = "RUAMM";
+        } elseif ($rubriqueId == 67) {
+            $libelle = "FIAF";
+        } elseif ($rubriqueId == 56) {
+            $libelle = rand(0, 2) == 0 ? "RETRAITE" : (rand(0, 1) == 0 ? "PRESTATIONS_FAMILIALES" : "CHOMAGE");
+        } elseif ($rubriqueId == 59 || $rubriqueId == 62) {
+            $libelle = "ATMP";
+        } elseif ($rubriqueId == 68) {
+            $libelle = "FDS";
+        } elseif ($rubriqueId == 64) {
+            $libelle = "FORMATION_PROFESSIONNELLE";
+        } elseif ($rubriqueId == 71 || $rubriqueId == 75) {
+            $libelle = "CRE";
+        } elseif ($rubriqueId == 65) {
+            $libelle = "FSH";
+        } elseif ($rubriqueId == 66) {
+            $libelle = "CCS";
+        }
+
+        if ($rubriqueId != 66) {
+            $xmlContent .= "                    <assiette>\n";
+            $xmlContent .= "                        <type>$libelle</type>\n";
+            $xmlContent .= "                        <valeur>$base</valeur>\n";
+            $xmlContent .= "                    </assiette>\n";
+        }
+
+        $totalAssiette = 0;
+        $totalValeur = 0;
+
+        if ($rubriqueId == 66) {
+            $totalAssiette += $base;
+            $totalValeur += round($base * 2 / 100, 0);
+        }
     }
     $xmlContent .= "                </assiettes>\n";
 
@@ -116,20 +152,14 @@ $xmlContent .= "        </assures>\n";
 $xmlContent .= "        <decompte>\n";
 $xmlContent .= "            <cotisations>\n";
 $xmlContent .= "                <cotisation>\n";
-$xmlContent .= "                    <type>RUAMM</type>\n";
-$xmlContent .= "                    <tranche>TRANCHE_1</tranche>\n";
-$xmlContent .= "                    <assiette>3583400</assiette>\n";
-$xmlContent .= "                    <valeur>556144</valeur>\n";
+$xmlContent .= "                    <type>CCS</type>\n";
+$xmlContent .= "                    <assiette>$totalAssiette</assiette>\n";
+$xmlContent .= "                    <valeur>$totalValeur</valeur>\n";
 $xmlContent .= "                </cotisation>\n";
 $xmlContent .= "            </cotisations>\n";
-$xmlContent .= "            <totalCotisations>1803203</totalCotisations>\n";
 $xmlContent .= "            <deductions>\n";
-$xmlContent .= "                <deduction>\n";
-$xmlContent .= "                    <type>ACOMPTE</type>\n";
-$xmlContent .= "                    <valeur>3203</valeur>\n";
-$xmlContent .= "                </deduction>\n";
+$xmlContent .= "                <deduction> </deduction>\n";
 $xmlContent .= "            </deductions>\n";
-$xmlContent .= "            <montantAPayer>1700000</montantAPayer>\n";
 $xmlContent .= "        </decompte>\n";
 $xmlContent .= "    </corps>\n";
 $xmlContent .= "</doc>";

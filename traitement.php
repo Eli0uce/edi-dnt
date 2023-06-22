@@ -3,7 +3,7 @@ require "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $periode = $_POST["periode"];
-    $year = $_POST["annee"];
+    $annuel = $_POST["annuel"];
 
     // Generate the XML content
     $prefix = "DN-";
@@ -16,14 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $extension = ".xml";
 
     // Determine the values based on the selected period
-    if ($periode === "mois") {
+    if ($periode === "mensuel") {
         $type = "M";
-        $numero = str_pad($_POST["mois"], 2, "0", STR_PAD_LEFT);
-    } elseif ($periode === "trimestre") {
+        $numero = str_pad($_POST["mensuel"], 2, "0", STR_PAD_LEFT);
+    } elseif ($periode === "trimestriel") {
         $type = "T";
-        $trimestre = $_POST["trimestre"];
-        $numero = str_pad($trimestre, 2, "0", STR_PAD_LEFT);
-    } elseif ($periode === "annee") {
+        $trimestriel = $_POST["trimestriel"];
+        $numero = str_pad($trimestriel, 2, "0", STR_PAD_LEFT);
+    } elseif ($periode === "annuel") {
         $type = "A";
         $numero = "01";
     }
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $suffixeCafat = $rowSociete['suffixeCafat'];
 
     // Generate the XML file name
-    $fileName = $prefix . $year . $type . $numero . $separator . "0" . $numeroCafat . $suffixeCafat . $separator . $numeroUnique . $extension;
+    $fileName = $prefix . $annuel . $type . $numero . $separator . "0" . $numeroCafat . $suffixeCafat . $separator . $numeroUnique . $extension;
 
     // Construire et exécuter la requête SQL pour récupérer les données
     $periode = strtoupper($_POST["periode"]);
