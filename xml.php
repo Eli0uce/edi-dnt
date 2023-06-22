@@ -22,8 +22,18 @@ $tauxat = $rowSociete['tauxat'];
 // Get data from the salaries table
 $querySalaries = "SELECT s.*, b.*, lb.rubrique_id FROM salaries s
                   INNER JOIN bulletin b ON s.id = b.salarie_id
-                  INNER JOIN ligne_bulletin lb ON b.id = lb.bulletin_id";
+                  INNER JOIN ligne_bulletin lb ON b.id = lb.bulletin_id LIMIT 1";
 $resultSalaries = $conn->query($querySalaries);
+
+if ($periode === "trimestriel" && $trimestriel === "1") {
+    $queryBulletin = "SELECT * FROM bulletin WHERE SUBSTRING(periode, 1, 4) = '$annuel' AND (SUBSTRING(periode, 3, 2) = '01' OR SUBSTRING(periode, 3, 2) = '02' OR SUBSTRING(periode, 3, 2) = '03')";
+} elseif ($periode === "trimestriel" && $trimestriel === "2") {
+    $queryBulletin = "SELECT * FROM bulletin WHERE SUBSTRING(periode, 1, 4) = '$annuel' AND (SUBSTRING(periode, 3, 2) = '04' OR SUBSTRING(periode, 3, 2) = '05' OR SUBSTRING(periode, 3, 2) = '06')";
+} elseif ($periode === "trimestriel" && $trimestriel === "3") {
+    $queryBulletin = "SELECT * FROM bulletin WHERE SUBSTRING(periode, 1, 4) = '$annuel' AND (SUBSTRING(periode, 3, 2) = '07' OR SUBSTRING(periode, 3, 2) = '08' OR SUBSTRING(periode, 3, 2) = '09')";
+} elseif ($periode === "trimestriel" && $trimestriel === "4") {
+    $queryBulletin = "SELECT * FROM bulletin WHERE SUBSTRING(periode, 1, 4) = '$annuel' AND (SUBSTRING(periode, 3, 2) = '10' OR SUBSTRING(periode, 3, 2) = '11' OR SUBSTRING(periode, 3, 2) = '12')";
+}
 
 // Generate the XML content
 $xmlContent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n<doc>\n";
@@ -157,9 +167,7 @@ $xmlContent .= "                    <assiette>$totalAssiette</assiette>\n";
 $xmlContent .= "                    <valeur>$totalValeur</valeur>\n";
 $xmlContent .= "                </cotisation>\n";
 $xmlContent .= "            </cotisations>\n";
-$xmlContent .= "            <deductions>\n";
-$xmlContent .= "                <deduction> </deduction>\n";
-$xmlContent .= "            </deductions>\n";
+$xmlContent .= "            <deductions>\n </deductions>\n";
 $xmlContent .= "        </decompte>\n";
 $xmlContent .= "    </corps>\n";
 $xmlContent .= "</doc>";
