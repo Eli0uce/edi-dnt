@@ -20,11 +20,13 @@ $RID = $rowSociete['RID'];
 $tauxat = $rowSociete['tauxat'];
 
 // Get data from the salaries table 
-$querySalaries = "SELECT s.*, b.*, lb.rubrique_id, sum(lb.base) base FROM salaries s
+$querySalaries = "SELECT s.*, b.*, lb.rubrique_id, SUM(lb.base) AS base
+                    FROM salaries s
                     INNER JOIN bulletin b ON s.id = b.salarie_id
                     INNER JOIN ligne_bulletin lb ON b.id = lb.bulletin_id
-                    WHERE rubrique_id IN (57, 58, 67, 56, 59, 62, 68, 64, 65, 66)
-                    group by s.nom, lb.rubrique_id ";
+                    WHERE b.periode IN ('202201', '202202', '202203')
+                    AND lb.rubrique_id IN (57, 58, 67, 56, 59, 62, 68, 64, 65, 66)
+                    GROUP BY s.nom, lb.rubrique_id";
 $resultSalaries = $conn->query($querySalaries);
 
 // Generate the XML content
